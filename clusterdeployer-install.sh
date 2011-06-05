@@ -65,10 +65,11 @@ while true; do
 
       for app in "${CLUSTER_DEPLOY_DIR}"/*; do
 
+         rsync -rlpgDz --del "${app}" "${TOMCAT_DEPLOY_DIR}"
+
          for node in "${POOL[@]}"; do
 
-            rsync -avzP --del "${app}" "${TOMCAT_DEPLOY_DIR}"
-            rsync -avzP --del "${app}" ${node}:"${TOMCAT_DEPLOY_DIR}"
+            rsync -rlpgDz --del "${app}" ${node}:"${TOMCAT_DEPLOY_DIR}"
 
          done
 
