@@ -41,11 +41,12 @@ TOMCAT_HOME=${TOMCAT_HOME:=/opt/tomcat}
 
 useradd -r -d ${CD_HOME} -m -g ${TOMCAT_GROUP} clusterdeployer
 echo 'umask 0002' >> ~clusterdeployer/.bashrc
+touch ~${TOMCAT_USER}/.bashrc && chown ${TOMCAT_USER}: ~${TOMCAT_USER}/.bashrc
 echo 'umask 0002' >> ~${TOMCAT_USER}/.bashrc
 
 su -l -s /bin/sh ${TOMCAT_USER} -c "mkdir ${TOMCAT_HOME}/.clusterdeploy"
-su -l -s /bin/sh ${TOMCAT_USER} -c "find tomcat*/webapps -maxdepth 1 ! -name ROOT ! -name tunnel-web \
-                                    -exec chmod g+w {} -R \;"
+su -l -s /bin/sh ${TOMCAT_USER} -c "ls -1 | egrep -v '(ROOT|tunnel-web)' | xargs chmod -R g+w"
+
 {
 cat <<'EOF'
 #!/bin/bash
