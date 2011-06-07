@@ -47,7 +47,6 @@ echo 'umask 0002' >> ${tomcat_home}/.bashrc
 su -l -s /bin/bash ${TOMCAT_USER} -c "mkdir ${tomcat_home}/.clusterdeploy"
 find ${TOMCAT_HOME}/webapps -maxdepth 1 ! -name ROOT ! -name tunnel-web -exec chmod g+w {} \;
 
-
 {
 cat <<'EOF'
 #!/bin/bash
