@@ -1,13 +1,14 @@
 #!/bin/bash
 
-show_usage {
-   echo "Usage: $0 [Option...] [...]"
+function show_usage {
+   echo "Usage: $0 [options ...]"
    echo
-   echo -e "-d --dir \t ClusterDeployer Home (default: /opt/clusterdeployer)\n"
-   echo -e "-u --tomcat-user \t Tomcat user (default: tomcat)\n"
-   echo -e "-g --tomcat-group \t Tomcat group (default: tomcat)\n"
-   echo -e "-H --tomcat-home \t Tomcat home (default: /opt/tomcat)\n"
-   echo -e "-h --help -? \t Print this help message.\n"
+   echo "Options:"
+   echo -e " -d --dir \t\t ClusterDeployer Home (default: /opt/clusterdeployer)"
+   echo -e " -u --tomcat-user \t Tomcat user (default: tomcat)"
+   echo -e " -g --tomcat-group \t Tomcat group (default: tomcat)"
+   echo -e " -H --tomcat-home \t Tomcat home (default: /opt/tomcat)"
+   echo -e " -h --help \t\t Print this help message."
    exit 1
 }
 
