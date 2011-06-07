@@ -56,8 +56,8 @@ EOF
 cat <<EOF
 POOL=($NODES)
 TOMCAT_HOME="${TOMCAT_HOME}"
-CLUSTER_DEPLOY_DIR="${TOMCAT_HOME}"/.clusterdeploy
-TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}"/webapps
+CLUSTER_DEPLOY_DIR="${TOMCAT_HOME}/.clusterdeploy"
+TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}/webapps"
 USER=clusterdeployer
 EOF
 cat <<'EOF'
