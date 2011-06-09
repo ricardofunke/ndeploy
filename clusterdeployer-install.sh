@@ -12,7 +12,8 @@ function show_usage {
    exit 1
 }
 
-[ $# -eq 0 ] && show_usage
+first_param="${@:1}"
+[[ $# -eq 0 || "${first_param:0:1}" != "-" ]] && show_usage
 
 SHORTOPTS="d:u:g:H:h"
 LONGOPTS="dir:,tomcat-user:,tomcat-group:,tomcat-home:,help"
