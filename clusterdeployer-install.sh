@@ -24,10 +24,10 @@ eval set -- "$ARGS"
 
 while [ $# -gt 0 ]; do
    case "$1" in
-      -d|--dir)                 CD_HOME=$2; shift ;;
-      -u|--tomcat-user)         TOMCAT_USER=$2; shift ;;
-      -g|--tomcat-group)        TOMCAT_GROUP=$2; shift ;;
-      -H|--tomcat-home)         TOMCAT_HOME=$2; shift ;;
+      -d|--dir)                 ${CD_HOME%/}=$2; shift ;;
+      -u|--tomcat-user)         ${TOMCAT_USER%/}=$2; shift ;;
+      -g|--tomcat-group)        ${TOMCAT_GROUP%/}=$2; shift ;;
+      -H|--tomcat-home)         ${TOMCAT_HOME%/}=$2; shift ;;
       -h|--help)                show_usage ;;
       --)                       shift; break ;;
       *)                        show_usage; break ;;
