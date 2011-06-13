@@ -6,7 +6,7 @@ function show_usage {
    echo "Options:"
    echo -e " -d --dir \t\t ClusterDeployer Home (default: /opt/clusterdeployer)"
    echo -e " -u --tomcat-user \t Tomcat user (default: tomcat)"
-   echo -e " -g --tomcat-group \t Tomcat group (default: tomcat)"
+   echo -e " -g --tomcat-group \t Tomcat group (default: same as --tomcat-user)"
    echo -e " -H --tomcat-home \t Tomcat home (default: /opt/tomcat)"
    echo -e " -h --help \t\t Print this help message."
    exit 1
@@ -37,7 +37,7 @@ done
 
 CD_HOME=${CD_HOME:=/opt/clusterdeployer}
 TOMCAT_USER=${TOMCAT_USER:=tomcat}
-TOMCAT_GROUP=${TOMCAT_GROUP:=tomcat}
+TOMCAT_GROUP=${TOMCAT_GROUP:=$TOMCAT_USER}
 TOMCAT_HOME=${TOMCAT_HOME:=/opt/tomcat}
 
 useradd -r -d ${CD_HOME} -m -g ${TOMCAT_GROUP} clusterdeployer
