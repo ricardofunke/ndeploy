@@ -95,7 +95,7 @@ echo \
 '...
 start)
    [[ ! $(ps `cat ~clusterdeployer/pid`) ]] &&
-   su -l clusterdeployer -c "bash clusterdeployer.sh 2> clusterdeployer.log" &
+     su -l clusterdeployer -c "bash clusterdeployer.sh 2> clusterdeployer.log" &
 ...
 stop)
    kill -9 $(cat ~clusterdeployer/pid)
