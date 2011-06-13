@@ -58,7 +58,7 @@ EOF
 cat <<EOF
 POOL=($NODES) # Put the other nodes here separated by spaces, except for local machine
 TOMCAT_HOME="${TOMCAT_HOME}"
-CLUSTER_DEPLOY_DIR="${TOMCAT_HOME}/.clusterdeploy"
+CLUSTER_DEPLOY_DIR="${tomcat_home}/.clusterdeploy"
 TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}/webapps"
 USER=clusterdeployer
 EOF
@@ -95,7 +95,7 @@ echo "Copy these lines to your tomcat's init script:"
 echo \
 '...
 start)
-   [[ ! $(ps h `cat ~clusterdeployer/pid`) ]] &&
+   [[ ! $(ps h -U clusterdeployer | fgrep `cat ~clusterdeployer/pid 2> /dev/null`) ]] &&
      su -l clusterdeployer -c "bash clusterdeployer.sh 2> clusterdeployer.log" &
 ...
 stop)
