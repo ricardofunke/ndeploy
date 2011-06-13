@@ -41,6 +41,7 @@ TOMCAT_GROUP=${TOMCAT_GROUP:=$TOMCAT_USER}
 TOMCAT_HOME=${TOMCAT_HOME:=/opt/tomcat}
 
 useradd -r -d ${CD_HOME} -m -g ${TOMCAT_GROUP} clusterdeployer
+touch ~clusterdeployer/pid
 echo 'umask 0002' >> ~clusterdeployer/.bashrc
 tomcat_home="$(su -l liferay -s /bin/bash -c 'echo $HOME')"
 echo 'umask 0002' >> ${tomcat_home}/.bashrc
