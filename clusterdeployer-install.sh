@@ -94,6 +94,7 @@ echo "Copy these lines to your tomcat's init script:"
 echo \
 '...
 start)
+   [[ ! $(ps `cat ~clusterdeployer/pid`) ]] &&
    su -l clusterdeployer -c "bash clusterdeployer.sh 2> clusterdeployer.log" &
 ...
 stop)
