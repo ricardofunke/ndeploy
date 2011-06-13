@@ -55,7 +55,7 @@ cat <<'EOF'
 echo $$ > ~clusterdeployer/pid
 EOF
 cat <<EOF
-POOL=($NODES)
+POOL=($NODES) # Put the other nodes here separated by spaces, except for local machine
 TOMCAT_HOME="${TOMCAT_HOME}"
 CLUSTER_DEPLOY_DIR="${TOMCAT_HOME}/.clusterdeploy"
 TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}/webapps"
@@ -102,3 +102,5 @@ stop)
 
 echo "You must also make ssh keys for the clusterdeployer user in each node of your cluster."
 echo "See ssk-keygen and ssh-copy-id commands to do so."
+echo
+echo "Don't forget to insert de nodes in the POOL variable in the /opt/clusterdeployer/clusterdeployer.sh script!"
