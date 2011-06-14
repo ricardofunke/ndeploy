@@ -148,7 +148,7 @@ start)
      su -l clusterdeployer -c "bash clusterdeployer.sh 2> clusterdeployer.log" &
 ...
 stop)
-   kill -9 $(cat ~clusterdeployer/pid)
+   fuser -k ~clusterdeployer/clusterdeployer.sh
 ...'
 
 echo "You must also make ssh keys for the clusterdeployer user in each node of your cluster."
