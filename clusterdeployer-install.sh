@@ -41,7 +41,6 @@ TOMCAT_GROUP=${TOMCAT_GROUP:=$TOMCAT_USER}
 TOMCAT_HOME=${TOMCAT_HOME:=/opt/tomcat}
 
 useradd -r -d ${CD_HOME} -m -g ${TOMCAT_GROUP} clusterdeployer
-su -l clusterdeployer -c 'touch pid'
 echo 'umask 0002' >> ~clusterdeployer/.bashrc
 tomcat_home="$(su -l $TOMCAT_USER -s /bin/bash -c 'echo $HOME')"
 echo 'umask 0002' >> ${tomcat_home}/.bashrc
@@ -145,7 +144,7 @@ echo "Copy these lines to your tomcat's init script:"
 echo \
 '...
 start)
-   [[ ! $(ps h -U clusterdeployer | fgrep `cat ~clusterdeployer/pid 2> /dev/null`) ]] &&
+   [[ ! $( { ps h -U clusterdeployer | fgrep $(cat ~clusterdeployer/pid); } 2> /dev/null ) ]] &&
      su -l clusterdeployer -c "bash clusterdeployer.sh 2> clusterdeployer.log" &
 ...
 stop)
