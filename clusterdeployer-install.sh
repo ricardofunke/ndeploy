@@ -52,8 +52,6 @@ find ${TOMCAT_HOME}/webapps -maxdepth 1 ! -name ROOT ! -name tunnel-web -exec ch
 cat <<'EOF'
 #!/bin/bash
 
-echo $$ > ~clusterdeployer/pid
-
 EOF
 cat <<EOF
 POOL=() # Put the other nodes here separated by spaces, except for local machine
@@ -144,7 +142,7 @@ echo "Copy these lines to your tomcat's init script:"
 echo \
 '...
 start)
-   [[ ! $( { ps h -U clusterdeployer | fgrep $(cat ~clusterdeployer/pid); } 2> /dev/null ) ]] &&
+   [[ ! $( fuser ~clusterdeployer/clusterdeployer.sh  ) ]] &&
      su -l clusterdeployer -c "bash clusterdeployer.sh 2> clusterdeployer.log" &
 ...
 stop)
