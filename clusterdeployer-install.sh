@@ -54,15 +54,16 @@ cat <<'EOF'
 #!/bin/bash
 
 echo $$ > ~clusterdeployer/pid
+
 EOF
 cat <<EOF
 POOL=() # Put the other nodes here separated by spaces, except for local machine
 TOMCAT_HOME="${TOMCAT_HOME}"
 CLUSTER_DEPLOY_DIR="${tomcat_home}/.clusterdeploy"
 TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}/webapps"
+
 EOF
 cat <<'EOF'
-
 while true; do
    
    if [[ $(ls -A "${CLUSTER_DEPLOY_DIR}") ]]; then
@@ -86,6 +87,7 @@ while true; do
    sleep 5
 
 done
+
 EOF
 } > ~clusterdeployer/clusterdeployer.sh 
 
@@ -96,9 +98,9 @@ cat <<EOF
 POOL=() # Put the other nodes here separated by spaces, except for local machine
 TOMCAT_HOME="${TOMCAT_HOME}"
 TOMCAT_DEPLOY_DIR="${tomcat_home}/webapps"
+
 EOF
 cat <<'EOF'
-
 function undeploy {
 
    app="${TOMCAT_DEPLOY_DIR}/${1##/*}"
