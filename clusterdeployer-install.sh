@@ -56,13 +56,13 @@ cat <<'EOF'
 echo $$ > ~clusterdeployer/pid
 EOF
 cat <<EOF
-POOL=($NODES) # Put the other nodes here separated by spaces, except for local machine
+POOL=() # Put the other nodes here separated by spaces, except for local machine
 TOMCAT_HOME="${TOMCAT_HOME}"
 CLUSTER_DEPLOY_DIR="${tomcat_home}/.clusterdeploy"
 TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}/webapps"
-USER=clusterdeployer
 EOF
 cat <<'EOF'
+
 while true; do
    
    if [[ $(ls -A "${CLUSTER_DEPLOY_DIR}") ]]; then
@@ -89,7 +89,41 @@ done
 EOF
 } > ~clusterdeployer/clusterdeployer.sh 
 
+{
+cat <<EOF
+#!/bin/bash
+
+POOL=() # Put the other nodes here separated by spaces, except for local machine
+TOMCAT_HOME="${TOMCAT_HOME}"
+TOMCAT_DEPLOY_DIR="${tomcat_home}/webapps"
+EOF
+cat <<'EOF'
+
+app="${TOMCAT_DEPLOY_DIR}/${1##/*}"
+app="${app%/}"
+
+if [[ -d "$app" ]]; then
+
+   rm -rf "$app"
+
+   for node in ${POOL[@]}"; do
+
+      ssh ${node rm -rf "$app"
+
+   done
+
+else
+
+   echo "The application $1 does not exist!"
+   exit 1
+
+fi
+
+EOF
+} > ~clusterdeployer/clusterundeployer.sh
+
 chown clusterdeployer:root ~clusterdeployer -R
+chmod +x ~clusterdeployer/*.sh
 
 echo "Copy these lines to your tomcat's init script:"
 echo \
@@ -105,4 +139,5 @@ stop)
 echo "You must also make ssh keys for the clusterdeployer user in each node of your cluster."
 echo "See ssk-keygen and ssh-copy-id commands to do so."
 echo
-echo "Don't forget to insert de nodes in the POOL variable in the /opt/clusterdeployer/clusterdeployer.sh script!"
+echo "Don't forget to insert de nodes in the POOL variable in the /opt/clusterdeployer/clusterdeployer.sh and /opt/clusterdeployer/clusterundeployer.sh scripts!"
+
