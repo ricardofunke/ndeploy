@@ -71,10 +71,11 @@ while true; do
 
          for node in "${POOL[@]}"; do
 
-            rsync -rlpgDz --del "${app}" ${node}:"${TOMCAT_DEPLOY_DIR}"
+            rsync -rlpgDz --del "${app}" ${node}:"${TOMCAT_DEPLOY_DIR}" &
 
          done
 
+         wait
          rm -rf "${app}"
 
       done
