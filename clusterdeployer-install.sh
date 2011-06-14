@@ -145,6 +145,7 @@ echo \
 start)
    [[ ! $( fuser ~clusterdeployer/clusterdeployer.sh  ) ]] &&
      su -l clusterdeployer -c "bash clusterdeployer.sh 2> clusterdeployer.log" &
+     disown
 ...
 stop)
    fuser -k ~clusterdeployer/clusterdeployer.sh
