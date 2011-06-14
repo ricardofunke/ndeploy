@@ -99,25 +99,39 @@ TOMCAT_DEPLOY_DIR="${tomcat_home}/webapps"
 EOF
 cat <<'EOF'
 
-app="${TOMCAT_DEPLOY_DIR}/${1##/*}"
-app="${app%/}"
+function undeploy {
 
-if [[ -d "$app" ]]; then
+   app="${TOMCAT_DEPLOY_DIR}/${1##/*}"
+   app="${app%/}"
 
-   rm -rf "$app"
+   if [[ -d "$app" ]]; then
 
-   for node in ${POOL[@]}"; do
+      rm -rf "$app"
 
-      ssh ${node rm -rf "$app"
+      for node in ${POOL[@]}"; do
 
-   done
+         ssh ${node rm -rf "$app"
 
-else
+      done
 
-   echo "The application $1 does not exist!"
-   exit 1
+   else
 
-fi
+      echo "ERROR: The application $1 does not exist!"
+      exit 1
+
+   fi
+}
+
+case "$1" in
+   -h|--help|'')
+      echo "Usage $0 <application>"
+      ;;
+
+   *)
+      undeploy "$1"
+      ;;
+
+esac
 
 EOF
 } > ~clusterdeployer/clusterundeployer.sh
