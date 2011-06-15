@@ -67,7 +67,7 @@ while true; do
 
       for app in "${CLUSTER_DEPLOY_DIR}"/*; do
 
-         rsync -rlpgDz --del "${app}" "${TOMCAT_DEPLOY_DIR}"
+         rsync -rlpgDz --del "${app}" "${TOMCAT_DEPLOY_DIR}" &
 
          for node in "${POOL[@]}"; do
 
@@ -104,7 +104,7 @@ function undeploy {
    app="${TOMCAT_DEPLOY_DIR}/${1##/*}"
    app="${app%/}"
 
-   if [[ -d "$app" ]]; then
+   if [[ -a "$app" ]]; then
 
       rm -rf "$app"
 
