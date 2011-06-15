@@ -122,7 +122,7 @@ function undeploy {
    fi
 }
 
-if [[ $# -qt 1 ]]; then echo 'Error: Undeploy one app at a time!'; exit 1; fi
+if [[ $# -gt 1 ]]; then echo 'Error: Undeploy one app at a time!'; exit 1; fi
 
 case "$1" in
    -h|--help|'')
