@@ -30,7 +30,7 @@ while [ $# -gt 0 ]; do
       -H|--tomcat-home)         ${TOMCAT_HOME%/}=$2; shift ;;
       -h|--help)                show_usage ;;
       --)                       shift; break ;;
-      *)                        show_usage; break ;;
+      *)                        show_usage >&2; break ;;
     esac
     shift
 done
@@ -116,13 +116,13 @@ function undeploy {
 
    else
 
-      echo "ERROR: The application $1 does not exist!"
+      echo "ERROR: The application $1 does not exist!" >&2
       exit 1
 
    fi
 }
 
-if [[ $# -gt 1 ]]; then echo 'Error: Undeploy one app at a time!'; exit 1; fi
+if [[ $# -gt 1 ]]; then echo 'Error: Undeploy one app at a time!' >&2 ; exit 1; fi
 
 case "$1" in
    -h|--help|'')
@@ -151,8 +151,19 @@ stop)
    fuser -k ~clusterdeployer/clusterdeployer.sh
 ...'
 
-echo "You must also make ssh keys for the clusterdeployer user in each node of your cluster."
-echo "See ssk-keygen and ssh-copy-id commands to do so."
 echo
-echo "Don't forget to insert de nodes in the POOL variable in the /opt/clusterdeployer/clusterdeployer.sh and /opt/clusterdeployer/clusterundeployer.sh scripts!"
+echo "You must also make ssh keys for the \"clusterdeployer\" user in each node of your cluster after install clusterdeployer script in all nodes."
+echo
+echo "Use the commands above using \"clusterdeployer\" user to do that:"
+echo "> ssk-keygen"
+echo "> ssh-copy-id ~clusterdeployer/.ssh/id_rsa.pub clusterdeployer@<other_node>"
+echo
+echo "Before crate ssh keys you must define a password to \"clusterdeployer\" user using \"passwd clusterdeployer\" command,"
+echo "but after create ssh keys it's good to clean and lock clusterdeployer user password"
+echo
+echo "Use the commands above using root user to do that:"
+echo "> passwd -d clusterdeployer"
+echo "> passwd -l clusterdeployer"
+echo
+echo "Attention! Don't forget to insert de nodes in the POOL variable in the /opt/clusterdeployer/clusterdeployer.sh and /opt/clusterdeployer/clusterundeployer.sh scripts!"
 
