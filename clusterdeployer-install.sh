@@ -154,16 +154,18 @@ stop)
 echo
 echo "You must also make ssh keys for the \"clusterdeployer\" user in *EACH NODE* of your cluster after install clusterdeployer script in all nodes."
 echo
-echo "Use the commands above using \"clusterdeployer\" user to do that:"
+echo "First create a password for \"clusterdeployer\" user in each of your nodes:"
+echo "> passwd clusterdeployer"
+echo
+echo "Then, use the commands above using \"clusterdeployer\" user in each of your nodes to create the key:"
 echo "> ssk-keygen"
 echo "> ssh-copy-id ~clusterdeployer/.ssh/id_rsa.pub clusterdeployer@<other_node>"
 echo
-echo "Before crate ssh keys you must define a password to \"clusterdeployer\" user using \"passwd clusterdeployer\" command,"
-echo "but after create ssh keys it's good to clean and lock clusterdeployer user password"
-echo
+echo "After create ssh keys it's good to clean and lock clusterdeployer user password in each of your nodes."
 echo "Use the commands above using root user to do that:"
 echo "> passwd -d clusterdeployer"
 echo "> passwd -l clusterdeployer"
 echo
 echo "Attention! Don't forget to insert de nodes in the POOL variable in the /opt/clusterdeployer/clusterdeployer.sh and /opt/clusterdeployer/clusterundeployer.sh scripts!"
+echo
 
