@@ -152,7 +152,7 @@ stop)
 ...'
 
 echo
-echo "You must also make ssh keys for the \"clusterdeployer\" user in each node of your cluster after install clusterdeployer script in all nodes."
+echo "You must also make ssh keys for the \"clusterdeployer\" user in *EACH NODE* of your cluster after install clusterdeployer script in all nodes."
 echo
 echo "Use the commands above using \"clusterdeployer\" user to do that:"
 echo "> ssk-keygen"
