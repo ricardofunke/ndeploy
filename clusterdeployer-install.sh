@@ -110,7 +110,7 @@ function undeploy {
 
       for node in ${POOL[@]}"; do
 
-         ssh ${node rm -rf "$app"
+         ssh ${node} rm -rf "$app"
 
       done
 
