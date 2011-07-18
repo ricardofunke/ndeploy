@@ -95,7 +95,7 @@ cat <<EOF
 
 POOL=() # Put the other nodes here separated by spaces, except for local machine
 TOMCAT_HOME="${TOMCAT_HOME}"
-TOMCAT_DEPLOY_DIR="${tomcat_home}/webapps"
+TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}/webapps"
 
 EOF
 cat <<'EOF'
@@ -108,9 +108,9 @@ function undeploy {
 
       rm -rf "$app"
 
-      for node in ${POOL[@]}"; do
+      for node in "${POOL[@]}"; do
 
-         ssh ${node} rm -rf "$app"
+         ssh "${node}" rm -rf "$app"
 
       done
 
@@ -152,20 +152,20 @@ stop)
 ...'
 
 echo
-echo "You must also make ssh keys for the \"clusterdeployer\" user in *EACH NODE* of your cluster after install clusterdeployer script in all nodes."
+echo "- You must also make ssh keys for the \"clusterdeployer\" user in *EACH NODE* of your cluster after install clusterdeployer script in all nodes."
 echo
-echo "First create a password for \"clusterdeployer\" user in each of your nodes:"
+echo "- First create a password for \"clusterdeployer\" user in each of your nodes:"
 echo "> passwd clusterdeployer"
 echo
-echo "Then, use the commands above using \"clusterdeployer\" user in each of your nodes to create the key:"
+echo "- Then, use the commands above using \"clusterdeployer\" user in each of your nodes to create the key:"
 echo "> ssk-keygen"
 echo "> ssh-copy-id ~clusterdeployer/.ssh/id_rsa.pub clusterdeployer@<other_node>"
 echo
-echo "After create ssh keys it's good to clean and lock clusterdeployer user password in each of your nodes."
-echo "Use the commands above using root user to do that:"
+echo "- After create ssh keys it's good to clean and lock clusterdeployer user password in each of your nodes."
+echo "- Use the commands above using root user to do that:"
 echo "> passwd -d clusterdeployer"
 echo "> passwd -l clusterdeployer"
 echo
-echo "Attention! Don't forget to insert de nodes in the POOL variable in the /opt/clusterdeployer/clusterdeployer.sh and /opt/clusterdeployer/clusterundeployer.sh scripts!"
+echo ":: ATTENTION! Don't forget to insert de nodes in the POOL variable in the /opt/clusterdeployer/clusterdeployer.sh and /opt/clusterdeployer/clusterundeployer.sh scripts!"
 echo
 
