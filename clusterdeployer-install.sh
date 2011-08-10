@@ -9,11 +9,10 @@ function show_usage {
    echo -e " -g --tomcat-group \t Tomcat group (default: same as --tomcat-user)"
    echo -e " -H --tomcat-home \t Tomcat home (default: /opt/tomcat)"
    echo -e " -h --help \t\t Print this help message."
-   exit 1
 }
 
 first_param="${@:1}"
-[[ $# -eq 0 || "${first_param:0:1}" != "-" ]] && show_usage
+if [[ $# -eq 0 || "${first_param:0:1}" != "-" ]]; then show_usage; exit 1; fi
 
 SHORTOPTS="d:u:g:H:h"
 LONGOPTS="dir:,tomcat-user:,tomcat-group:,tomcat-home:,help"
@@ -24,13 +23,13 @@ eval set -- "$ARGS"
 
 while [ $# -gt 0 ]; do
    case "$1" in
-      -d|--dir)                 CD_HOME=${2%/}; shift ;;
-      -u|--tomcat-user)         TOMCAT_USER=${2%/}; shift ;;
-      -g|--tomcat-group)        TOMCAT_GROUP=${2%/}; shift ;;
-      -H|--tomcat-home)         TOMCAT_HOME=${2%/}; shift ;;
-      -h|--help)                show_usage ;;
+      -d|--dir)                 shift; CD_HOME=${1%/} ;;
+      -u|--tomcat-user)         shift; TOMCAT_USER=${1%/} ;;
+      -g|--tomcat-group)        shift; TOMCAT_GROUP=${1%/} ;;
+      -H|--tomcat-home)         shift; TOMCAT_HOME=${1%/} ;;
+      -h|--help)                show_usage; exit 0 ;;
       --)                       shift; break ;;
-      *)                        show_usage >&2; break ;;
+      *)                        show_usage; exit 1 ;;
     esac
     shift
 done
