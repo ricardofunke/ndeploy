@@ -40,9 +40,10 @@ TOMCAT_GROUP=${TOMCAT_GROUP:=$TOMCAT_USER}
 TOMCAT_HOME=${TOMCAT_HOME:=/opt/tomcat}
 
 useradd -r -d ${CD_HOME} -m -g ${TOMCAT_GROUP} clusterdeployer
-echo 'umask 0002' >> ~clusterdeployer/.bashrc
 tomcat_home="$(su -l $TOMCAT_USER -s /bin/bash -c 'echo $HOME')"
-echo 'umask 0002' >> ${tomcat_home}/.bashrc
+
+#echo 'umask 0002' >> ~clusterdeployer/.bashrc
+#echo 'umask 0002' >> ${tomcat_home}/.bashrc
 
 su -l -s /bin/bash ${TOMCAT_USER} -c "mkdir ${tomcat_home}/.clusterdeploy"
 find ${TOMCAT_HOME}/webapps -maxdepth 1 ! -name ROOT ! -name tunnel-web -exec chmod g+w {} \;
@@ -66,11 +67,11 @@ while true; do
 
       for app in "${CLUSTER_DEPLOY_DIR}"/*; do
 
-         rsync -rlpgDz --del "${app}" "${TOMCAT_DEPLOY_DIR}" &
+         su -l clusterdeployer -c "rsync -rlpgDz --del \"${app}\" \"${TOMCAT_DEPLOY_DIR}\"" &
 
          for node in "${POOL[@]}"; do
 
-            rsync -rlpgDz --del "${app}" ${node}:"${TOMCAT_DEPLOY_DIR}" &
+            su -l clusterdeployer -c "rsync -rlpgDz --del \"${app}\" ${node}:\"${TOMCAT_DEPLOY_DIR}\"" &
 
          done
 
@@ -105,11 +106,11 @@ function undeploy {
 
    if [[ -a "$app" ]]; then
 
-      rm -rf "$app"
+      su -l clusterdeployer -c "rm -rf \"$app\""
 
       for node in "${POOL[@]}"; do
 
-         ssh "${node}" rm -rf "$app"
+         su -l clusterdeployer -c "ssh \"${node}\" rm -rf \"$app\""
 
       done
 
@@ -144,7 +145,7 @@ echo \
 '...
 start)
    [[ ! $( fuser ~clusterdeployer/clusterdeployer.sh  ) ]] &&
-     su -l clusterdeployer -c "bash clusterdeployer.sh 2> clusterdeployer.log &" 
+     bash clusterdeployer.sh 2> clusterdeployer.log & 
 ...
 stop)
    fuser -k ~clusterdeployer/clusterdeployer.sh
@@ -158,7 +159,7 @@ echo "> passwd clusterdeployer"
 echo
 echo "- Then, use the commands above using \"clusterdeployer\" user in each of your nodes to create the key:"
 echo "> ssk-keygen"
-echo "> ssh-copy-id ~clusterdeployer/.ssh/id_rsa.pub clusterdeployer@<other_node>"
+echo "> ssh-copy-id -i ~clusterdeployer/.ssh/id_rsa.pub clusterdeployer@<other_node>"
 echo
 echo "- After create ssh keys it's good to clean and lock clusterdeployer user password in each of your nodes."
 echo "- Use the commands above using root user to do that:"
