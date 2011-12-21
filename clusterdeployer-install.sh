@@ -42,7 +42,7 @@ TOMCAT_HOME=${TOMCAT_HOME:=/opt/tomcat}
 useradd -r -d ${CD_HOME} -m -g ${TOMCAT_GROUP} clusterdeployer
 tomcat_home="$(su -l $TOMCAT_USER -s /bin/bash -c 'echo $HOME')"
 
-#echo 'umask 0002' >> ~clusterdeployer/.bashrc
+echo 'umask 0002' >> ~clusterdeployer/.bashrc
 #echo 'umask 0002' >> ${tomcat_home}/.bashrc
 
 su -l -s /bin/bash ${TOMCAT_USER} -c "mkdir ${tomcat_home}/.clusterdeploy"
