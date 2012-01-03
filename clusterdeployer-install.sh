@@ -39,6 +39,25 @@ TOMCAT_USER=${TOMCAT_USER:=tomcat}
 TOMCAT_GROUP=${TOMCAT_GROUP:=$TOMCAT_USER}
 TOMCAT_HOME=${TOMCAT_HOME:=/opt/tomcat}
 
+# Checking for a new version (by @pmalves ;)
+rm -rf .tmp
+mkdir -p .tmp/dist
+
+wget --no-check-certificate 'https://github.com/ricardofunke/clusterdeployer/raw/master/clusterdeployer-install.sh' -P .tmp -o /dev/null
+
+if ! diff $0 .tmp/clusterdeployer-install.sh >/dev/null ; then
+  echo
+  echo -n "There's a new clusterdeployer-install version available. Do you want to upgrade? (y/N) "
+  read -e answer
+
+  case $answer in
+	 [Yy]* ) cp .tmp/clusterdeployer-install.sh $0; echo "Upgrade successfull. Rerun"; exit 0;;
+  esac
+
+fi
+
+rm -rf .tmp
+
 useradd -r -d ${CD_HOME} -m -g ${TOMCAT_GROUP} clusterdeployer
 tomcat_home="$(su -l $TOMCAT_USER -s /bin/bash -c 'echo $HOME')"
 
