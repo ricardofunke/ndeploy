@@ -36,7 +36,6 @@ while true; do
 done
 
 deploy() {
-
   [ $UID -eq 0 ] && local opts='-az' || local opts='-rlpgDz' 
 
   rsync $opts --del "$1" "${TOMCAT_DEPLOY_DIR}" &
@@ -46,50 +45,33 @@ deploy() {
   done
  
   wait
-
 }
 
 undeploy() {
-
   app="${TOMCAT_DEPLOY_DIR}/${1##/*}"
   app="${app%/}"
 
   if [[ -a "$app" ]]; then
-
     rm -rf "$app"
 
     for node in "${NODES[@]}"; do
-
       ssh "$node" rm -rf "$app"
-
     done
-
   else
-
     echo "ERROR: The application $1 does not exist!" >&2
     exit 1
-
   fi
-
 }
 
 daemon_mode() {
-
   while true; do
-   
     if [[ $(ls -A "${CLUSTER_DEPLOY_DIR}") ]]; then
-
       for app in "${CLUSTER_DEPLOY_DIR}"/*; do
-
         deploy "${app}"
         rm -rf "${app}"
-
       done
-
     fi
 
     sleep 5
-
   done
-
 }
