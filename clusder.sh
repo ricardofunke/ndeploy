@@ -52,11 +52,13 @@ undeploy() {
   app="${app%/}"
 
   if [[ -a "$app" ]]; then
+
     rm -rf "$app"
 
     for node in "${NODES[@]}"; do
       ssh "$node" rm -rf "$app"
     done
+
   else
     echo "ERROR: The application $1 does not exist!" >&2
     exit 1
@@ -65,11 +67,14 @@ undeploy() {
 
 daemon_mode() {
   while true; do
+
     if [[ $(ls -A "${CLUSTER_DEPLOY_DIR}") ]]; then
+
       for app in "${CLUSTER_DEPLOY_DIR}"/*; do
         deploy "${app}"
         rm -rf "${app}"
       done
+
     fi
 
     sleep 5
