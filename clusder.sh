@@ -37,7 +37,9 @@ done
 
 deploy() {
 
-  rsync -rlpgDz --del "$1" "${TOMCAT_DEPLOY_DIR}" &
+  [ $UID -eq 0 ] && local opts='-az' || local opts='-rlpgDz' 
+
+  rsync $opts --del "$1" "${TOMCAT_DEPLOY_DIR}" &
 
   for node in "${NODES[@]}"; do
     rsync -rlpgDz --del "$1" ${node}:"${TOMCAT_DEPLOY_DIR}" &
