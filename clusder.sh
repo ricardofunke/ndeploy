@@ -15,26 +15,6 @@ show_usage() {
   echo -e " -h, --help \t\t\t\t\t\t Show this message."
 }
 
-first_param="${@:1}"
-if [[ $# -eq 0 || "${first_param:0:1}" != "-" ]]; then show_usage; exit 1; fi
-
-SHORTOPTS="di:u:h"
-LONGOPTS="daemon,install:,deploy:,uninstall:,undeploy:,help"
-
-ARGS=$(getopt --name $0 --longoptions="$LONGOPTS" --options="$SHORTOPTS" -- "$@")
-eval set -- "$ARGS"
-
-while true; do
-  case "$1" in
-    -d|--daemon)			daemon_mode;		shift		;;
-    -i|--install|--deploy)		deploy "\`$2'";		shift 2		;;
-    -u|--uninstall|--undeploy)		undeploy "\'$2'";	shift 2		;;
-    -h|--help)				show_usage;		exit 0		;;
-    --)					shift;			break		;;
-    *)					show_usage;		exit 1		;;
-  esac
-done
-
 deploy() {
   [ $UID -eq 0 ] && local opts='-az' || local opts='-rlpgDz' 
 
@@ -80,3 +60,24 @@ daemon_mode() {
     sleep 5
   done
 }
+
+first_param="${@:1}"
+if [[ $# -eq 0 || "${first_param:0:1}" != "-" ]]; then show_usage; exit 1; fi
+
+SHORTOPTS="di:u:h"
+LONGOPTS="daemon,install:,deploy:,uninstall:,undeploy:,help"
+
+ARGS=$(getopt --name $0 --longoptions="$LONGOPTS" --options="$SHORTOPTS" -- "$@")
+eval set -- "$ARGS"
+
+while true; do
+  case "$1" in
+    -d|--daemon)			daemon_mode;		shift		;;
+    -i|--install|--deploy)		deploy "\`$2'";		shift 2		;;
+    -u|--uninstall|--undeploy)		undeploy "\'$2'";	shift 2		;;
+    -h|--help)				show_usage;		exit 0		;;
+    --)					shift;			break		;;
+    *)					show_usage;		exit 1		;;
+  esac
+done
+
