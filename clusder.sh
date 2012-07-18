@@ -2,7 +2,7 @@
 
 NODES=() # Put all other nodes but this local machine inside the parentheses separated by spaces
 TOMCAT_HOME="" # Put your Tomcat dir inside the quotation marks
-CLUSTER_DEPLOY_DIR="${TOMCAT_HOME}/clusterdeploy"
+CLUSTER_DEPLOY_DIR="${TOMCAT_HOME}/clusder/deploy"
 TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}/webapps"
 
 show_usage() {
@@ -16,19 +16,27 @@ show_usage() {
 }
 
 deploy() {
-  [ $UID -eq 0 ] && local opts='-az' || local opts='-rlpgDz' 
+  [ $UID -eq 0 ] && local opts='-az' || local opts='-rlpgDz'
 
   rsync $opts --del "$1" "${TOMCAT_DEPLOY_DIR}" &
 
   for node in "${NODES[@]}"; do
     rsync $opts --del "$1" ${node}:"${TOMCAT_DEPLOY_DIR}" &
   done
- 
+
+  wait
+
+  chmod g+w "${TOMCAT_DEPLOY_DIR}"/"${1##*/}" &
+
+  for node in "${NODES[@]}"; do
+    ssh ${node} chmod g+w "${TOMCAT_DEPLOY_DIR}"/"${1##*/}" &
+  done
+
   wait
 }
 
 undeploy() {
-  app="${TOMCAT_DEPLOY_DIR}/${1##/*}"
+  app="${TOMCAT_DEPLOY_DIR}/${1##*/}"
   app="${app%/}"
 
   if [[ -a "$app" ]]; then
@@ -73,11 +81,10 @@ eval set -- "$ARGS"
 while true; do
   case "$1" in
     -d|--daemon)			daemon_mode;		shift		;;
-    -i|--install|--deploy)		deploy "\`$2'";		shift 2		;;
-    -u|--uninstall|--undeploy)		undeploy "\'$2'";	shift 2		;;
+    -i|--install|--deploy)		deploy "$2";		shift 2		;;
+    -u|--uninstall|--undeploy)		undeploy "$2";		shift 2		;;
     -h|--help)				show_usage;		exit 0		;;
     --)					shift;			break		;;
     *)					show_usage;		exit 1		;;
   esac
 done
-
