@@ -1,10 +1,8 @@
 This script allows you to replicate .war applications deploy to all your Tomcat nodes. It uses SSH with Rsync to do that, and depends of a pair of SSH keys in each node to the replication be possible.
 
-The .war applications must be copied in the .clusterdeploy dir located in the Tomcat dir after this script were installed. This script will then transfer this application to all your nodes via rsync.
+You must create a new deploy directory where ndeploy will watch and specify it in the $CLUSTER_DEPLOY_DIR variable.
 
 This script was initially made based on the Liferay Portal cluster deployment, so for those who uses Liferay, it's necessary to set the destiny dir for Liferay deploy, using the following property in the portal-ext.properties, e.g:
 
-auto.deploy.dest.dir=/opt/liferay/.clusterdeploy
-
-Set the .clusterdeploy directory in according to your Liferay installation.
+auto.deploy.dest.dir=/opt/liferay/ndeploy/deploy
 
