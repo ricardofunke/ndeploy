@@ -6,4 +6,3 @@ This script was initially made based on the Liferay Portal cluster deployment, s
 
 auto.deploy.dest.dir=/opt/liferay/ndeploy/deploy
 
-.
