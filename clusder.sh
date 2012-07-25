@@ -26,13 +26,16 @@ deploy() {
 
   wait
 
-  chmod g+w "${TOMCAT_DEPLOY_DIR}"/"${1##*/}" &
+  if [ $UID -ne 0 ]; then
 
-  for node in "${NODES[@]}"; do
-    ssh ${node} chmod g+w "${TOMCAT_DEPLOY_DIR}"/"${1##*/}" &
-  done
+    chmod g+w "${TOMCAT_DEPLOY_DIR}"/"${1##*/}" &
 
-  wait
+    for node in "${NODES[@]}"; do
+      ssh ${node} chmod g+w "${TOMCAT_DEPLOY_DIR}"/"${1##*/}" &
+    done
+
+    wait
+  fi
 }
 
 undeploy() {
