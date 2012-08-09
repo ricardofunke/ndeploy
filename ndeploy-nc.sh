@@ -44,7 +44,7 @@ undeploy() {
 }
 
 daemon_mode() {
-  ./nc.openbsd -l -k -p 3300 -v | tar x &
+  ./nc.openbsd -l -k -p 3300 | tar x -C "$TOMCAT_DEPLOY_DIR" &
 
   while true; do
 
