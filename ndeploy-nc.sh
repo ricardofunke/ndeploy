@@ -44,9 +44,9 @@ undeploy() {
 }
 
 daemon_mode() {
-  while true; do
+  ./nc.openbsd -l -k -p 3300 -v | tar x &
 
-    ./nc.openbsd -l -k -p 3300 -v | tar x &
+  while true; do
 
     if [[ $(ls -A "${CLUSTER_DEPLOY_DIR}") ]]; then
 
