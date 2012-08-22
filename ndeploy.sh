@@ -1,9 +1,18 @@
 #!/bin/bash
 
-NODES=() # Put all other nodes but this local machine inside the parentheses separated by spaces
-TOMCAT_HOME="" # Put your Tomcat dir inside the quotation marks
-CLUSTER_DEPLOY_DIR="${TOMCAT_HOME}/ndeploy/deploy"
-TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}/webapps"
+# Put all other nodes but this local machine inside the parentheses separated by spaces
+NODES=() 
+
+# Put the path for the application server inside the quotation marks
+APPSRV_HOME="" 
+
+# This is where this script will watch for files to deploy
+CLUSTER_DEPLOY_DIR="${APPSRV_HOME}/ndeploy/deploy"
+
+# Change to the correct path for the deploy dir of your application server
+APPSRV_DEPLOY_DIR="${APPSRV_HOME}/webapps" 
+
+##
 
 show_usage() {
   echo "Usage: $0 <options>"
@@ -18,20 +27,20 @@ show_usage() {
 deploy() {
   [ $UID -eq 0 ] && local opts='-az' || local opts='-rlpgDz'
 
-  rsync $opts --del "$1" "${TOMCAT_DEPLOY_DIR}" &
+  rsync $opts --del "$1" "${APPSRV_DEPLOY_DIR}" &
 
   for node in "${NODES[@]}"; do
-    rsync $opts --del "$1" ${node}:"${TOMCAT_DEPLOY_DIR}" &
+    rsync $opts --del "$1" ${node}:"${APPSRV_DEPLOY_DIR}" &
   done
 
   wait
 
   if [ $UID -ne 0 ]; then
 
-    chmod g+w "${TOMCAT_DEPLOY_DIR}"/"${1##*/}" &
+    chmod g+w "${APPSRV_DEPLOY_DIR}"/"${1##*/}" &
 
     for node in "${NODES[@]}"; do
-      ssh ${node} chmod g+w "${TOMCAT_DEPLOY_DIR}"/"${1##*/}" &
+      ssh ${node} chmod g+w "${APPSRV_DEPLOY_DIR}"/"${1##*/}" &
     done
 
     wait
@@ -39,7 +48,7 @@ deploy() {
 }
 
 undeploy() {
-  app="${TOMCAT_DEPLOY_DIR}/${1##*/}"
+  app="${APPSRV_DEPLOY_DIR}/${1##*/}"
   app="${app%/}"
 
   if [[ -a "$app" ]]; then

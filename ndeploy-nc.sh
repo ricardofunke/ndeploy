@@ -1,9 +1,18 @@
 #!/bin/bash
 
-NODES=() # Put all other nodes but this local machine inside the parentheses separated by spaces
-TOMCAT_HOME="" # Put your Tomcat dir inside the quotation marks
-CLUSTER_DEPLOY_DIR="${TOMCAT_HOME}/ndeploy/deploy"
-TOMCAT_DEPLOY_DIR="${TOMCAT_HOME}/webapps"
+# Put all other nodes but this local machine inside the parentheses separated by spaces
+NODES=()
+
+# Put the path for the application server inside the quotation marks
+APPSRV_HOME=""
+
+# This is where this script will watch for files to deploy
+CLUSTER_DEPLOY_DIR="${APPSRV_HOME}/ndeploy/deploy"
+
+# Change to the correct path for the deploy dir of your application server
+APPSRV_DEPLOY_DIR="${APPSRV_HOME}/webapps"
+
+##
 
 show_usage() {
   echo "Usage: $0 <options>"
@@ -16,7 +25,7 @@ show_usage() {
 }
 
 deploy() {
-  rsync $opts --del "$1" "${TOMCAT_DEPLOY_DIR}" &
+  rsync $opts --del "$1" "${APPSRV_DEPLOY_DIR}" &
 
   for node in "${NODES[@]}"; do
     tar -c "$1" | ./nc.openbsd -q 0 $node 3300 &
@@ -26,7 +35,7 @@ deploy() {
 }
 
 undeploy() {
-  app="${TOMCAT_DEPLOY_DIR}/${1##*/}"
+  app="${APPSRV_DEPLOY_DIR}/${1##*/}"
   app="${app%/}"
 
   if [[ -a "$app" ]]; then
@@ -44,7 +53,7 @@ undeploy() {
 }
 
 daemon_mode() {
-  ./nc.openbsd -l -k -p 3300 | tar x -C "$TOMCAT_DEPLOY_DIR" &
+  ./nc.openbsd -l -k -p 3300 | tar x -C "$APPSRV_DEPLOY_DIR" &
 
   while true; do
 
