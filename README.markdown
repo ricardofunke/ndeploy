@@ -25,7 +25,7 @@ Do the same for all Tomcat nodes you have.
 
 Now you have to make sure that this script will run with Tomcat side-by-side as a deamon. Use the option -d to run the script as a deamon. You can put it in your Tomcat startup script. Remember to use the same user as Tomcat to run this script.
 
-# For Liferay users:
+## For Liferay users:
 
 Liferay must be set to deploy the application not to the application server but first to ndeploy.sh "deploy" folder, so that it can copy to all other nodes. The order of deploying will be like this:
 
