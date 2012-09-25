@@ -15,7 +15,6 @@ You must create ssh public keys and distribute between all nodes using the appli
 As root:
 
     # su - tomcat
-    
     $ ssh-keygen
 
 Press enter without set any password
