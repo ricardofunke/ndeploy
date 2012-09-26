@@ -25,7 +25,7 @@ show_usage() {
 }
 
 deploy() {
-  [ $UID -eq 0 ] && local opts='-az' || local opts='-rlpgDz'
+  local opts='-az'
 
   rsync $opts --del "$1" "${APPSRV_DEPLOY_DIR}" &
 
@@ -34,17 +34,6 @@ deploy() {
   done
 
   wait
-
-  if [ $UID -ne 0 ]; then
-
-    chmod g+w "${APPSRV_DEPLOY_DIR}"/"${1##*/}" &
-
-    for node in "${NODES[@]}"; do
-      ssh ${node} chmod g+w "${APPSRV_DEPLOY_DIR}"/"${1##*/}" &
-    done
-
-    wait
-  fi
 }
 
 undeploy() {
