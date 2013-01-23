@@ -60,8 +60,7 @@ daemon_mode() {
     if [[ $(ls -A "${CLUSTER_DEPLOY_DIR}") ]]; then
 
       for app in "${CLUSTER_DEPLOY_DIR}"/*; do
-        deploy "${app}"
-        rm -rf "${app}"
+        deploy "${app}" && rm -rf "${app}" || echo "Error: cannot deploy!"
       done
 
     fi
