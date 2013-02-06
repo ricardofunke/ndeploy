@@ -39,4 +39,4 @@ To do this, put this property into your portal-ext.properties:
 
 Change the value to correspond to the path to the ndeploy.sh deploy folder. You can make this in the Control Panel instead in Control Panel -> Plugins Installation -> Install More Plugins -> Configuration in the "Destination directory" field.
 
-It's all. Let me know if you have any trouble with this installation.
+That's all. Let me know if you have any trouble with this installation.
