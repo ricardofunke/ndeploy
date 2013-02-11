@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Put all other nodes but this local machine inside the parentheses separated by spaces
+# Put all other nodes EXCEPT THE LOCAL MACHINE inside the parentheses separated by spaces
 NODES=() 
 
 # Put the path for the application server inside the quotation marks
